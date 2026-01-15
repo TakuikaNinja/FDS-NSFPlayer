@@ -80,8 +80,9 @@ Reset:  sei
 		sta P1_HELD
 		lda DEFAULT_SONG
 		sta CurrentSong
-		
-		jsr CallInit
+		lda #$60										; RTS opcode
+		sta CallPlay
+;		jsr CallInit
 		bit PPU_STATUS
 		lda #$80
 		sta PPU_CTRL
@@ -98,12 +99,12 @@ Main:
 		cmp Frames
 		beq :-
 
-; Check pressed buttons
+; Check pressed buttons and change song as needed
 		lda P1_PRESSED
 		eor #$ff
 		and P1_HELD
 		sta P1_PRESSED
-		and #(BUTTON_LEFT | BUTTON_RIGHT)
+		and #(BUTTON_LEFT | BUTTON_RIGHT | BUTTON_START)
 		beq Main
 		
 		and #BUTTON_LEFT
@@ -118,7 +119,7 @@ Main:
 @CheckRight:
 		lda P1_PRESSED
 		and #BUTTON_RIGHT
-		beq @SetSong
+		beq @CheckStart
 		ldy CurrentSong
 		cpy TOTAL_SONGS
 		bne :+
@@ -127,9 +128,17 @@ Main:
 		iny
 		sty CurrentSong
 
-@SetSong:
+; Init the selected song, but have the Start button toggle the playback start
+@CheckStart:
 		jsr CallInit
-		jmp Main
+		lda P1_PRESSED
+		and #BUTTON_START
+		beq Main
+
+		lda CallPlay
+		eor #$0C										; toggle between RTS/JMP indirect
+		sta CallPlay
+		bne Main										; [unconditional branch]
 	
 CallInit:
 		ldy CurrentSong									; decrement song number first
