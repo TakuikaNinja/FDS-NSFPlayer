@@ -58,15 +58,17 @@ def parse_nsf_header(header):
 		if i == 2:
 			continue
 		assert expansions & (1 << i) == 0, "NSF cannot use expansion audio other than FDS"
-	return load_addr
+	return load_addr, data_size
 
 def main(in_filename):
 	out = bytearray()
 	with open(in_filename, "rb") as in_file:
 		data = in_file.read(0x80)
-	load_addr = parse_nsf_header(data)
+	load_addr, data_size = parse_nsf_header(data)
 	with open("nsfdata.asm", "w") as out_file:
 		out_str = f'.define NSFFile "{in_filename}"\nNSFLoad := ${load_addr:04x}\n'
+		if data_size > 0:
+			out_str += f"NSFDataSize := ${data_size:06x}\n"
 		#print(out_str)
 		out_file.write(out_str)
 

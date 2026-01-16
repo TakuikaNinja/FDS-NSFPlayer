@@ -316,7 +316,15 @@ Offset = NSFLoad - $6000
 .out .sprintf ("Offset = $%04X", Offset)
 Padding = Offset+NSFHeader-*
 .out .sprintf ("Padding = $%04X bytes", Padding)
-.res Padding, $ff
+.res Padding, 0
 .assert * = NSFLoad, error, "Can't fit NSF data!"
-.incbin NSFFile, NSFHeaderSize
+
+.ifdef NSFDataSize
+	.incbin NSFFile, NSFHeaderSize, NSFDataSize
+.else
+	.incbin NSFFile, NSFHeaderSize
+.endif
+
+; Pad rest of PRG-RAM
+.res $8000+NSFHeader-*, 0
 
