@@ -45,7 +45,7 @@ IMPORTANT: The player will write to the FDS wave volume (0x4080) and 2A03 status
 
 ## Example Screenshot
 
-NSF file: 
+Song: [All A Dragon Can Eat](https://youtu.be/d_2zBO894_k) - [NSF download](https://file.garden/ZWWUbm2eyH6XVYLi/NSF%2BEmu%20Playback%20Files/NSF/Originals/AllADragonCanEat.nsf)
 
 ![Screenshot for example NSF](/img/example.png)
 

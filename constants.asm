@@ -28,7 +28,7 @@
 
 ; NSF string field line lengths
 FIELD_SIZE = 32
-TitleLine1Length = 21
+TitleLine1Length = 20
 ArtistLine1Length = 16
-CopyrightLine1Length = 20
+CopyrightLine1Length = 16
 
