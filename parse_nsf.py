@@ -32,20 +32,18 @@ def parse_nsf_header(header):
 	print(f"play address: ${play_addr:04x}")
 	assert play_addr >= min_addr and play_addr <= max_addr, "play address should be within $8000-$dfff"
 	
-	ntsc_period = header[0x6E] + (header[0x6F] << 8)
-	ntsc_speed = 1000000 / ntsc_period
-	pal_period = header[0x78] + (header[0x79] << 8)
-	pal_speed = 1000000 / pal_period
-	
 	# prefer NTSC
 	target = 60
-	speed = ntsc_speed
+	period = header[0x6E] + (header[0x6F] << 8)
 	
 	region = header[0x7A]
 	if region == 0x01:
 		print("WARNING: PAL setting detected, songs may play faster than intended")
 		target = 50
-		speed = pal_speed
+		period = header[0x78] + (header[0x79] << 8)
+	
+	assert period > 0, "period = 0, cannot calculate speed"
+	speed = 1000000 / period
 	print(f"playback rate: {speed:.3f}")
 	assert round(speed) == target, "nonstandard speeds are not supported"
 	
