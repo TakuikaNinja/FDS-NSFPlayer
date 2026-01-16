@@ -130,15 +130,25 @@ Main:
 
 ; Init the selected song, but have the Start button toggle the playback start
 @CheckStart:
-		jsr CallInit
 		lda P1_PRESSED
 		and #BUTTON_START
-		beq Main
+		beq :+
 
 		lda CallPlay
 		eor #$0C										; toggle between RTS/JMP indirect
 		sta CallPlay
-		bne Main										; [unconditional branch]
+		cmp #$60										; did we just stop playback?
+		bne :+
+		
+		lda #$80
+		sta FDS_WAVE_ENV								; mute FDS wave just in case
+		sta SND_CHN										; same with 2A03 APU (bit 7 ignored)
+:
+; Evil optimisation: push Main (start of loop) as a return address before falling through to CallInit
+		lda #>(Main-1)
+		pha
+		lda #<(Main-1)
+		pha
 	
 CallInit:
 		ldy CurrentSong									; decrement song number first
@@ -320,6 +330,7 @@ Padding = Offset+NSFHeader-*
 .assert * = NSFLoad, error, "Can't fit NSF data!"
 
 .ifdef NSFDataSize
+	.out .sprintf ("NSFDataSize = $%04X", NSFDataSize)
 	.incbin NSFFile, NSFHeaderSize, NSFDataSize
 .else
 	.incbin NSFFile, NSFHeaderSize

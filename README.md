@@ -26,9 +26,9 @@ These are checked by the parser script or the CA65 source:
 - No bankswitching
 - NTSC speed, ~60Hz only (PAL speed songs are played faster, custom speeds are unsupported)
 - No expansion audio other than FDS (i.e. 2A03 only or 2A03+FDS)
-- No accesses to $6000-$7FFF (reserved by player program)
-- NSF data & load/init/play addresses must fit within $8000-$DFFF
-  - FDS disk game vectors at $DFF6-$DFFF are overwritten by the player program
+- No accesses to 0x6000-0x7FFF (reserved by player program)
+- NSF data & load/init/play addresses must fit within 0x8000-0xDFFF
+  - FDS disk game vectors at 0xDFF6-0xDFFF are overwritten by the player program
 - No NSF2 features (warning only, as optional metadata chunks are probably harmless)
 
 YMMV for anything else not specified here. No guarantees or warranties are provided.
@@ -38,6 +38,8 @@ YMMV for anything else not specified here. No guarantees or warranties are provi
 Controller 1 only:
 - Left/Right - change song number.
 - Start - start/stop song playback.
+
+IMPORTANT: The player will write to the FDS wave volume (0x4080) and 2A03 status (0x4015) registers when stopping playback, thus it expects the NSF init routine to properly initialise these before using them for playback. Depending on the NSF file, a soft reset may need to be performed if audio oddities occur after stopping or restarting playback.
 
 ## Example Screenshot
 

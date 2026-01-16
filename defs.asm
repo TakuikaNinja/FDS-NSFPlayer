@@ -32,6 +32,7 @@
 	FDS_READ_DATA = $4031
 	FDS_DRIVE_STATUS = $4032
 	FDS_BATTERY_EXT = $4033 ; bit 7 = battery, rest are shared with FDS_EXT
+	FDS_WAVE_ENV = $4080 ; bit 7 = envelope mode, bit 6 = envelope direction
 
 ; FDS BIOS defines
 ; game vectors
