@@ -6,6 +6,10 @@ The source NSF data is statically included alongside the player program without 
 
 The NSF Title, Artist, and Copyright fields are automatically displayed by the program, along with a basic interface to change songs and start/stop playback.
 
+## Disclaimer
+
+Commercial game rips are not intended nor expected to work on this player. Please do not use this player as a means of distributing/selling NSF music without permission from the owner or copyright holder. 
+
 ## Usage
 
 1. Clone this repo and install the [CC65 suite](https://cc65.github.io/).
