@@ -44,6 +44,8 @@ YMMV for anything else not specified here. No guarantees or warranties are provi
 Controller 1 only:
 - Left/Right - change song number.
 - Start - start/stop song playback.
+- Select - toggle PPU rendering to help reduce noise.
+  - also restarts playback if already playing a song.
 
 IMPORTANT: The player will write to the FDS wave volume (0x4080) and 2A03 status (0x4015) registers when stopping playback, thus it expects the NSF init routine to properly initialise these before using them for playback. Depending on the NSF file, a soft reset may need to be performed if audio oddities occur after stopping or restarting playback.
 

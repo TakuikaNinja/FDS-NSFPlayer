@@ -82,6 +82,8 @@ Reset:  sei
 		sta CurrentSong
 		lda #$60										; RTS opcode
 		sta CallPlay
+		lda #%00001010
+		sta PPUMaskWrite+1								; enable rendering
 ;		jsr CallInit
 		bit PPU_STATUS
 		lda #$80
@@ -104,7 +106,7 @@ Main:
 		eor #$ff
 		and P1_HELD
 		sta P1_PRESSED
-		and #(BUTTON_LEFT | BUTTON_RIGHT | BUTTON_START)
+		and #(BUTTON_LEFT | BUTTON_RIGHT | BUTTON_SELECT | BUTTON_START)
 		beq Main
 		
 		and #BUTTON_LEFT
@@ -119,7 +121,7 @@ Main:
 @CheckRight:
 		lda P1_PRESSED
 		and #BUTTON_RIGHT
-		beq @CheckStart
+		beq @CheckSelect
 		ldy CurrentSong
 		cpy TOTAL_SONGS
 		bne :+
@@ -127,6 +129,15 @@ Main:
 :
 		iny
 		sty CurrentSong
+
+; (Disabling rendering helps reduce PPU noise on audio output)
+@CheckSelect:
+		lda P1_PRESSED
+		and #BUTTON_SELECT
+		beq @CheckStart
+		lda PPUMaskWrite+1
+		eor #%00001010
+		sta PPUMaskWrite+1
 
 ; Init the selected song, but have the Start button toggle the playback start
 @CheckStart:
@@ -173,6 +184,10 @@ NMI:
 		pha
 		
 		jsr OAMDMA_Controller_Sync
+
+PPUMaskWrite:
+		lda #%00001010
+		sta PPU_MASK
 		
 ; Print song number
 SongNumAddr := ($2000 + (22 << 5) + 10)
