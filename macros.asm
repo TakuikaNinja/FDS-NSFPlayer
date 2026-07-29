@@ -2,9 +2,7 @@
 
 ; place bytes + define a string label with length variable
 .macro define_string label, str
-	.proc label
-		.byte str
-	.endproc
+	.ident(.string(label)): .byte str
 	.ident(.concat(.string(label), "Length")) = .sizeof(label)
 .endmacro
 
@@ -51,6 +49,12 @@
 .macro encode_string inc32, fill, arg 
 	.assert .strlen(arg) > 0 && .strlen(arg) <= 64, error, "cannot encode string"
 	.byte (inc32 << 7) | (fill << 6) | (.strlen(arg) & 63), arg
+.endmacro
+
+; combines vram_addr & encode_string
+.macro encode_static_string base, tileX, tileY, inc32, fill, arg
+	vram_addr base, tileX, tileY
+	encode_string inc32, fill, arg
 .endmacro
 
 .macro encode_call addr16

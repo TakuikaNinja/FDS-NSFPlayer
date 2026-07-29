@@ -314,20 +314,14 @@ Palettes:
 PaletteDataSize = .sizeof(PaletteData)
 
 TextData:
-	vram_addr $2000, 8, 4
-	encode_string INC1, COPY, "FDS NSF Player"
-	vram_addr $2000, 8, 5
-	encode_string INC1, COPY, "by TakuikaNinja"
+	encode_static_string $2000, 8, 4, INC1, COPY, "FDS NSF Player"
+	encode_static_string $2000, 8, 5,  INC1, COPY, "by TakuikaNinja"
 	
-	vram_addr $2000, 4, 10
-	encode_string INC1, COPY, "Title:"
-	vram_addr $2000, 4, 14
-	encode_string INC1, COPY, "Artist:"
-	vram_addr $2000, 4, 18
-	encode_string INC1, COPY, "Copyright:"
+	encode_static_string $2000, 4, 10, INC1, COPY, "Title:"
+	encode_static_string $2000, 4, 14, INC1, COPY, "Artist:"
+	encode_static_string $2000, 4, 18, INC1, COPY, "Copyright:"
 	
-	vram_addr $2000, 4, 22
-	encode_string INC1, COPY, "Song:"
+	encode_static_string $2000, 4, 22, INC1, COPY, "Song:"
 	vram_addr $2000, 10, 22
 	encode_length INC1, COPY, 5
 SongNum:
