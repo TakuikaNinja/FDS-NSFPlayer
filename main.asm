@@ -251,6 +251,7 @@ DrawScreen:
 		jsr InitNametables
 		lda DEFAULT_SONG
 		ldx #$00
+		stx VRAM_BUFFER_END								; surprise, NSFs can end up altering this byte!
 		jsr BinToDec
 		lda TOTAL_SONGS
 		jsr BinToDec
